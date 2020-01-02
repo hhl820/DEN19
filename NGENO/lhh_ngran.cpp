@@ -17,7 +17,7 @@ double normal_estimate(
 	float inlier_beta
 )
 {
-	int cMin = 3;
+	int cMin = 2;
     double mu = 0, sigma = 0.01;
 	at::TensorAccessor<float, 3> PtsAccess = Pts_Patch.accessor<float, 3>();
 	at::TensorAccessor<float, 3> pAccess = probabilities.accessor<float, 3>();
@@ -26,6 +26,10 @@ double normal_estimate(
 	std::vector<float> Score(hypCount);
 	std::vector<float> wPts;
 	std::vector<std::vector<float>> NormHy(hypCount);
+	std::vector<float> OriginPts (3)
+	OriginPts[0] = 0
+	OriginPts[1] = 0
+	OriginPts[2] = 0
 	int nPts = PtsAccess.size(1);
 	std::vector<std::vector<float>> Pts(nPts);
 	for (int c = 0; c < nPts ; c++)
@@ -59,7 +63,7 @@ double normal_estimate(
 
 	// compute the score for the hyp (choose the highest score to compute the loss)
 	for (int h = 0; h < hypCount; h++) {
-		std::vector<std::vector<float>> Hpts(cMin);
+		std::vector<std::vector<float>> Hpts(3);
 		std::vector<float> Vn(3);
 		std::vector<float> dist_Pts2Plane(nPts);
 		std::vector<float> score_PerPts(nPts);
@@ -67,7 +71,7 @@ double normal_estimate(
 		for (int j = 0; j < cMin; j++) {
 			Hpts[j] = Pts[minSets[h][j]];
 		}
-
+		Hpts[2] = OriginPts
 
 		Vn = { 0, 0, 0 };
 		double norm2 = 0;
